@@ -100,6 +100,7 @@ def transform(raw):
 
 def outputs(tables,mode):
     folder=ROOT/'data/processed';folder.mkdir(parents=True,exist_ok=True)
+    (ROOT/'database').mkdir(parents=True,exist_ok=True)
     with sqlite3.connect(ROOT/'database/retail_analysis.sqlite') as con:
         for k,df in tables.items():
             df.to_csv(folder/f'{k}.csv',index=False)
