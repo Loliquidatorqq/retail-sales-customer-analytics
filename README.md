@@ -4,9 +4,9 @@
 
 An end-to-end **educational business analytics case** built around transactions from an online gift retailer. It answers four practical questions: *How are sales developing? Which products and markets matter? Who buys again? Which customers should retention teams prioritize?*
 
-> **Data status:** this repository ships a **synthetic demo** for offline execution, prominently labelled in outputs. The business-facing real-data analysis is designed for the separate **UCI Online Retail** dataset (541,909 transaction lines, Dec 2010–Dec 2011). To produce observations about the real retailer, download the original UCI workbook and run `--mode real`. **Do not quote demo figures as real findings.**
+> **Data status:** this repository provides a **synthetic demo generator** for offline execution; generated demo outputs are identified as synthetic. The business-facing real-data analysis is designed for the separate **UCI Online Retail** dataset (541,909 transaction lines, Dec 2010–Dec 2011). To produce observations about the real retailer, download the original UCI workbook and run `--mode real`. **Do not quote demo figures as real findings.**
 
-![Monthly gross sales in synthetic demo](figures/monthly_sales.png)
+**Portfolio stage:** reproducible code and SQL are published; sample charts and generated data are in the downloadable project archive. A validated real-data study and native Power BI report are still pending.
 
 ## 1. Business questions and KPIs
 
@@ -26,7 +26,7 @@ An end-to-end **educational business analytics case** built around transactions 
 - **License:** source dataset **CC BY 4.0**. Code in this repo **MIT**.
 - **Period:** December 1, 2010 to December 9, 2011 (first and last observation months are incomplete).
 - **Rows:** 541,909 in official source; each row is a transaction **line item**, not an order.
-- **Demo:** `data/demo/online_retail_demo.csv` is algorithmically generated, contains artificial customers and synthetic transactions. It is never used as evidence about the real business.
+- **Demo:** run `scripts/generate_demo.py` to create `data/demo/online_retail_demo.csv`, containing artificial customers and synthetic transactions. It is never used as evidence about the real business.
 
 The full original UCI workbook is **not bundled** in this repo. Its original file can be retrieved by `scripts/download_uci.py`.
 
@@ -60,11 +60,8 @@ You may also manually download `Online Retail.xlsx` from the UCI source page int
 
 ```
 retail-sales-customer-analytics/
-├── data/
-│   ├── demo/            # synthetic offline demo, explicitly labelled
-│   ├── raw/             # UCI workbook downloaded by user, Git-ignored
-│   └── processed/       # Power BI-ready CSV tables
-├── database/            # SQLite analytical database
+├── data/                # generated demo / UCI input / processed CSV outputs
+├── database/            # generated SQLite analytical database
 ├── scripts/             # demo generator, UCI downloader, ETL, charting, SQL runner
 ├── sql/                 # KPI, cohort, RFM, cancellation and window-function queries
 ├── powerbi/             # step-by-step Power BI build guide and DAX measures
@@ -98,11 +95,9 @@ Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.
 
 ### Synthetic DEMO (pipeline verification only)
 
-The generated [`analysis_summary.md`](reports/analysis_summary.md) shows example gross merchandise sales, orders, AOV, identifiable buyers, repeat rate and data-quality counters. **These numbers are not observed UCI results.**
+The example [`analysis_summary.md`](reports/analysis_summary.md) shows gross merchandise sales, orders, AOV, identifiable buyers, repeat rate and data-quality counters from synthetic data. **These numbers are not observed UCI results.**
 
-| Monthly sales preview | RFM segments | Country contribution |
-|---|---|---|
-| ![sales](figures/monthly_sales.png) | ![segments](figures/rfm_segments.png) | ![country](figures/sales_by_country.png) |
+Run the demo pipeline locally to generate the `figures/` PNG charts and `data/processed/` CSV files. The complete prepared version is also available as a separate downloadable ZIP in the project conversation.
 
 ## 6. Analytical boundaries
 
