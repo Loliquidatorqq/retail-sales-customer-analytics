@@ -1,0 +1,26 @@
+-- CREATE SEPARATE MEASURES IN POWER BI DESKTOP
+-- Source tables use CSV names invoices, sales and rfm.
+-- Ensure appropriate numeric types; do not sum both invoices and sales in a single visual.
+
+Gross Merchandise Sales = SUM(invoices[order_revenue])
+
+Orders = DISTINCTCOUNT(invoices[invoice_no])
+
+Average Order Value = DIVIDE([Gross Merchandise Sales], [Orders])
+
+Identified Customers = DISTINCTCOUNT(rfm[customer_id])
+
+Repeat Customers = CALCULATE(COUNTROWS(rfm), rfm[frequency] >= 2)
+
+Repeat Buyer Rate = DIVIDE([Repeat Customers], [Identified Customers])
+
+Units Sold = SUM(sales[quantity])
+
+Identified Customer Spend = SUM(rfm[monetary])
+
+RFM Customers = COUNTROWS(rfm)
+
+Sales Share Country = DIVIDE([Gross Merchandise Sales], CALCULATE([Gross Merchandise Sales], ALL(invoices[country])))
+
+-- OPTIONAL: Sales dynamic by country should use invoices[country] slicer.
+-- NOTE: If country slicer is on invoices and SKU chart uses sales, propagate filter via relationship.
