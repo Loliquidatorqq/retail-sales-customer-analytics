@@ -1,0 +1,67 @@
+name: Build real UCI retail analysis
+
+on:
+  push:
+    paths:
+      - '.github/workflows/real-analysis.yml'
+      - 'scripts/**'
+      - 'sql/**'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Download original UCI Online Retail dataset
+        run: python scripts/download_uci.py
+      - name: Run pandas pipeline on REAL data
+        run: python scripts/run_pipeline.py --mode real
+      - name: Verify using unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Execute SQL analyses
+        run: python scripts/run_sql.py
+      - name: Collect Power BI-ready tables and previews
+        shell: bash
+        run: |
+          mkdir -p powerbi/data
+          cp data/processed/monthly_sales.csv data/processed/country_sales.csv data/processed/product_sales.csv data/processed/rfm.csv data/processed/data_quality.csv data/processed/invoices.csv powerbi/data/
+          cp reports/02_cohorts.csv powerbi/data/cohort_retention.csv
+          python - <<'PY'
+          from pathlib import Path
+          Path('powerbi/data/SOURCE.txt').write_text('UCI Online Retail (Chen, 2015), dataset 352; original 541909 rows; processed by scripts/run_pipeline.py --mode real. Gross positive merchandise sales are NOT net revenue.\n',encoding='utf8')
+          PY
+      - name: Publish verified REAL summaries and dashboard inputs
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/ figures/ powerbi/data/
+          if git diff --cached --quiet; then
+            echo "No analytical outputs changed"
+          else
+            git commit -m "data: verified real UCI retail KPIs, charts and Power BI tables"
+            git push
+          fi
+      - name: Upload analysis evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: uci-real-analysis
+          path: |
+            reports/
+            figures/
+            powerbi/data/
+          retention-days: 30
