@@ -4,9 +4,27 @@
 
 An end-to-end **educational business analytics case** built around transactions from an online gift retailer. It answers four practical questions: *How are sales developing? Which products and markets matter? Who buys again? Which customers should retention teams prioritize?*
 
-> **Data status:** this repository provides a **synthetic demo generator** for offline execution; generated demo outputs are identified as synthetic. The business-facing real-data analysis is designed for the separate **UCI Online Retail** dataset (541,909 transaction lines, Dec 2010–Dec 2011). To produce observations about the real retailer, download the original UCI workbook and run `--mode real`. **Do not quote demo figures as real findings.**
+**Data status: VERIFIED REAL UCI DATA.** The GitHub Actions pipeline processed all 541,909 source rows. Python transformations, unit tests and SQL queries completed successfully. Exported real-data tables are in `powerbi/data/`, validated summary in `reports/analysis_summary.md`. The original raw workbook is intentionally not redistributed.
 
 **Portfolio stage:** reproducible code and SQL are published; sample charts and generated data are in the downloadable project archive. A validated real-data study and native Power BI report are still pending.
+
+## Verified real-data results (UCI Online Retail)
+
+| Measure | Verified result |
+| --- | ---: |
+| Original transaction lines | 541,909 |
+| Positive merchandise lines after filters/deduplication | 522,569 |
+| Gross positive merchandise sales | **£10,258,967.19** |
+| Orders | **19,774** |
+| Average order value | **£518.81** |
+| Identified customers | **4,334** |
+| Repeat-buyer share of identified customers | **65.3%** |
+| Original cancellation invoice lines | 9,288 |
+
+**Business findings:** November 2011 had the highest monthly gross merchandise sales (£1,452,115.98), while first and final months of this extract are partial. The UK contributed £8,736,191.54 (~85.2%) of observed gross positive merchandise sales. Customer segmentation and cohort counts can inform hypotheses for loyalty/reactivation, but do not establish a causal effect. These figures are *descriptive*, exclude cancellations from gross sales, and are **not net revenue/profit**.
+
+![RFM segmentation of identified customers](figures/rfm_segments.png)
+![Top countries by gross merchandise sales](figures/sales_by_country.png)
 
 ## 1. Business questions and KPIs
 
@@ -93,11 +111,11 @@ Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.
 
 ## 5. Selected metrics and visuals
 
-### Synthetic DEMO (pipeline verification only)
+### REAL UCI DATA (verified pipeline)
 
-The example [`analysis_summary.md`](reports/analysis_summary.md) shows gross merchandise sales, orders, AOV, identifiable buyers, repeat rate and data-quality counters from synthetic data. **These numbers are not observed UCI results.**
+[Full analysis summary](reports/analysis_summary.md) · [Monthly KPI results](reports/01_kpis.csv) · [Power BI-ready datasets](powerbi/data/) · [Dashboard build instructions](powerbi/REPORT_SETUP.md)
 
-Run the demo pipeline locally to generate the `figures/` PNG charts and `data/processed/` CSV files. The complete prepared version is also available as a separate downloadable ZIP in the project conversation.
+**A native Power BI `.pbix` file is not yet included.** This repository provides real data exports, DAX measures, and exact build specifications for Power BI Desktop. Figures shown above are Python-generated, not Power BI screenshots.
 
 ## 6. Analytical boundaries
 
@@ -109,12 +127,11 @@ Run the demo pipeline locally to generate the `figures/` PNG charts and `data/pr
 
 For full definitions see [methodology](docs/methodology.md).
 
-## 7. Next portfolio milestone
+## 7. Remaining Power BI milestone
 
-1. Run the original **UCI** dataset and compare Python and SQL KPIs.
-2. Build and commit an interactive `.pbix` report using the `powerbi/` guide.
-3. Replace the demo screenshots at the top with verified charts from UCI real data and add 3–4 measured insights with limitations.
-4. Link the finished project in Data Analyst / Product Analyst CV variants.
+1. Open the prepared real-data tables in Power BI Desktop and validate KPI totals.
+2. Assemble the three report pages following `powerbi/REPORT_SETUP.md`.
+3. Save and commit an actual `.pbix` file and genuine Power BI screenshots; until then this is an analytics pipeline with Power BI-ready outputs.
 
 ## Author
 
