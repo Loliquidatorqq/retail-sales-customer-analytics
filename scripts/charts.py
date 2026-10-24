@@ -5,6 +5,7 @@ import pandas as pd
 ROOT=Path(__file__).resolve().parents[1]
 
 def make_charts(tables,mode):
+    (ROOT/'figures').mkdir(parents=True,exist_ok=True)
     title_note='SYNTHETIC DEMO — NOT REAL SALES' if mode=='demo' else 'UCI Online Retail / historical'
     monthly=tables['monthly_sales'].sort_values('order_month')
     fig,ax=plt.subplots(figsize=(10,4.7))
