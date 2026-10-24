@@ -1,0 +1,7 @@
+segment,customers,gross_sales_from_customers_gbp,mean_orders,mean_recency_days
+Champions,905,5585923.06,11.47,12.8
+Loyal,591,1178159.75,5.67,71.2
+Potential loyalists,1083,957825.85,2.02,36.7
+At risk,549,511002.96,2.32,164.5
+Hibernating,968,428669.18,1.0,222.8
+New customers,238,75646.84,1.0,19.4

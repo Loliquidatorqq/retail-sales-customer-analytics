@@ -1,16 +1,16 @@
-# Analysis summary — SYNTHETIC DEMO (NOT REAL BUSINESS RESULTS)
+# Analysis summary — UCI ONLINE RETAIL DATA
 
-**Source mode:** `demo`. Gross positive merchandise sales are not net sales or profit.
+**Source mode:** `real`. Gross positive merchandise sales are not net sales or profit.
 
 | KPI | Result | Definition |
 |---|---:|---|
-| Gross merchandise sales | £192,805.88 | Sum positive merchandise quantity × price; excludes cancellations and selected charges |
-| Orders | 3,600 | Unique non-cancellation invoices with merchandise |
-| Average order value | £53.56 | Gross merchandise sales ÷ orders |
-| Identified customers | 648 | Buyers with nonempty customer ID |
-| Repeat-buyer share (identified only) | 98.3% | Identified buyers with 2+ invoices ÷ identified buyers |
-| Cancellation invoice lines (source) | 259 | Invoice starts C, quantity < 0, price > 0 |
-| Rows retained as merchandise sales | 10,692 | After documented filters and exact-row dedupe |
+| Gross merchandise sales | £10,258,967.19 | Sum positive merchandise quantity × price; excludes cancellations and selected charges |
+| Orders | 19,774 | Unique non-cancellation invoices with merchandise |
+| Average order value | £518.81 | Gross merchandise sales ÷ orders |
+| Identified customers | 4,334 | Buyers with nonempty customer ID |
+| Repeat-buyer share (identified only) | 65.3% | Identified buyers with 2+ invoices ÷ identified buyers |
+| Cancellation invoice lines (source) | 9,288 | Invoice starts C, quantity < 0, price > 0 |
+| Rows retained as merchandise sales | 522,569 | After documented filters and exact-row dedupe |
 
 ## Data limitations
 
@@ -25,13 +25,13 @@
 
 | metric                       |   value |
 |:-----------------------------|--------:|
-| raw_rows                     |   11190 |
-| exact_duplicate_rows         |       0 |
-| cancellation_invoice_rows    |     259 |
-| nonpositive_quantity_rows    |     259 |
-| nonpositive_price_rows       |       0 |
-| excluded_nonmerchandise_rows |     239 |
-| missing_customer_id_rows     |     157 |
+| raw_rows                     |  541909 |
+| exact_duplicate_rows         |    5268 |
+| cancellation_invoice_rows    |    9288 |
+| nonpositive_quantity_rows    |   10624 |
+| nonpositive_price_rows       |    2517 |
+| excluded_nonmerchandise_rows |    2913 |
+| missing_customer_id_rows     |  135080 |
 | invalid_invoice_date_rows    |       0 |
-| clean_merchandise_rows       |   10692 |
-| identified_sales_rows        |   10555 |
+| clean_merchandise_rows       |  522569 |
+| identified_sales_rows        |  391150 |

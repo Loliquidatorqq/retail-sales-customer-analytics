@@ -1,0 +1,11 @@
+metric,value
+raw_rows,541909
+exact_duplicate_rows,5268
+cancellation_invoice_rows,9288
+nonpositive_quantity_rows,10624
+nonpositive_price_rows,2517
+excluded_nonmerchandise_rows,2913
+missing_customer_id_rows,135080
+invalid_invoice_date_rows,0
+clean_merchandise_rows,522569
+identified_sales_rows,391150

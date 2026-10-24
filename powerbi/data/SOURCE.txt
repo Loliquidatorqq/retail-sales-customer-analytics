@@ -1,0 +1,1 @@
+UCI Online Retail (Chen, 2015), dataset 352; original 541909 rows; processed by scripts/run_pipeline.py --mode real. Gross positive merchandise sales are NOT net revenue.
