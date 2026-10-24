@@ -26,6 +26,8 @@ An end-to-end **educational business analytics case** built around transactions 
 ![RFM segmentation of identified customers](figures/rfm_segments.png)
 ![Top countries by gross merchandise sales](figures/sales_by_country.png)
 
+**Interactive standalone preview:** [`dashboard/retail-analytics-real.html`](dashboard/retail-analytics-real.html) (download and open in a browser). It is built from **verified real-data aggregates**, but is not a native Power BI report. The Power BI Desktop build instructions are in [`powerbi/REPORT_SETUP.md`](powerbi/REPORT_SETUP.md).
+
 ## 1. Business questions and KPIs
 
 | Area | Analysis | Why a business stakeholder cares |
