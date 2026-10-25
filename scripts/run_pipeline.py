@@ -1,4 +1,4 @@
-"""End-to-end reproducible retail analysis; Python 3.10+ / pandas + SQLite.
+"""Анализ продаж интернет-магазина на pandas и SQLite.
 
 Usage:
     python scripts/run_pipeline.py --mode demo
@@ -13,9 +13,9 @@ import sqlite3
 import pandas as pd
 import numpy as np
 
-ROOT=Path(__file__).resolve().parents[1]
-EXCLUDED_CODES={'POST','DOT','BANK CHARGES','M','D','S','AMAZONFEE','CRUK','C2','PADS'}
-REQUIRED=['InvoiceNo','StockCode','Description','Quantity','InvoiceDate','UnitPrice','CustomerID','Country']
+ROOT = Path(__file__).resolve().parents[1]
+EXCLUDED_CODES = {'POST', 'DOT', 'BANK CHARGES', 'M', 'D', 'S', 'AMAZONFEE', 'CRUK', 'C2', 'PADS'}
+REQUIRED = ['InvoiceNo', 'StockCode', 'Description', 'Quantity', 'InvoiceDate', 'UnitPrice', 'CustomerID', 'Country']
 
 def read_source(path):
     if not path.exists():
@@ -25,7 +25,8 @@ def read_source(path):
     else:
         raw=pd.read_csv(path,dtype={'InvoiceNo':str,'StockCode':str,'CustomerID':str})
     missing=set(REQUIRED)-set(raw.columns)
-    if missing:raise ValueError(f'Missing required source columns: {sorted(missing)}')
+    if missing:
+        raise ValueError(f'Missing required source columns: {sorted(missing)}')
     return raw
 
 def transform(raw):
@@ -36,7 +37,8 @@ def transform(raw):
     d['Country']=d['Country'].astype('string').str.strip()
     d['CustomerID']=d['CustomerID'].astype('string').str.replace(r'\.0$','',regex=True)
     d['InvoiceDate']=pd.to_datetime(d['InvoiceDate'],errors='coerce')
-    for c in ['Quantity','UnitPrice']:d[c]=pd.to_numeric(d[c],errors='coerce')
+    for column in ['Quantity', 'UnitPrice']:
+        d[column] = pd.to_numeric(d[column], errors='coerce')
     was=len(d)
     exact_duplicate_count=int(d.duplicated().sum())
     missing_customer_count=int(d.CustomerID.isna().sum())
@@ -47,7 +49,7 @@ def transform(raw):
     excluded_stock=d.StockCode.isin(EXCLUDED_CODES)
     cancellations=d.loc[cancel & d.Quantity.lt(0).fillna(False) & d.UnitPrice.gt(0).fillna(False)].copy()
     cancellations['refund_value_proxy']=(cancellations.Quantity.abs()*cancellations.UnitPrice).round(2)
-    # Merchandise revenue is gross positive line-item sales, not net of refunds.
+    # Учитываем только положительные товарные продажи. Возвраты считаем отдельно.
     valid=~(cancel|invalid_date|nonpositive_qty|nonpositive_price|excluded_stock)
     cleaned=d.loc[valid].drop_duplicates().copy()
     cleaned['line_revenue']=(cleaned.Quantity*cleaned.UnitPrice).round(2)
@@ -66,18 +68,23 @@ def transform(raw):
     rfm=known.groupby('customer_id').agg(
         latest_purchase=('invoice_date','max'),frequency=('invoice_no','nunique'),monetary=('order_revenue','sum')
     ).reset_index()
-    if len(rfm)>0:
+    if not rfm.empty:
         rfm['recency_days']=(anchor-pd.to_datetime(rfm.latest_purchase).dt.normalize()).dt.days
-        # percentile ranks cope with repeated scores / many one-order customers
+        # Баллы RFM: шкала от 1 до 5
         rfm['r_score']=6-np.ceil(rfm.recency_days.rank(method='average',pct=True)*5).astype(int)
         rfm['f_score']=np.ceil(rfm.frequency.rank(method='average',pct=True)*5).astype(int)
         rfm['m_score']=np.ceil(rfm.monetary.rank(method='average',pct=True)*5).astype(int)
         def segment(row):
-            if row.r_score>=4 and row.f_score>=4 and row.m_score>=4:return 'Champions'
-            if row.f_score>=4:return 'Loyal'
-            if row.r_score<=2 and row.f_score>=3:return 'At risk'
-            if row.r_score>=4 and row.frequency==1:return 'New customers'
-            if row.r_score>=3:return 'Potential loyalists'
+            if row.r_score >= 4 and row.f_score >= 4 and row.m_score >= 4:
+                return 'Champions'
+            if row.f_score >= 4:
+                return 'Loyal'
+            if row.r_score <= 2 and row.f_score >= 3:
+                return 'At risk'
+            if row.r_score >= 4 and row.frequency == 1:
+                return 'New customers'
+            if row.r_score >= 3:
+                return 'Potential loyalists'
             return 'Hibernating'
         rfm['segment']=rfm.apply(segment,axis=1)
     else:
@@ -88,7 +95,8 @@ def transform(raw):
     by_month[['gross_sales','aov']]=by_month[['gross_sales','aov']].round(2)
     by_country=sales.groupby('country').agg(gross_sales=('line_revenue','sum'),units=('quantity','sum')).reset_index().sort_values('gross_sales',ascending=False)
     by_product=sales.groupby(['stock_code','description']).agg(gross_sales=('line_revenue','sum'),units=('quantity','sum')).reset_index().sort_values('gross_sales',ascending=False)
-    for df in [by_country,by_product]:df['gross_sales']=df['gross_sales'].round(2)
+    for group in [by_country, by_product]:
+        group['gross_sales'] = group['gross_sales'].round(2)
     quality=pd.DataFrame([
         ['raw_rows',was],['exact_duplicate_rows',exact_duplicate_count],['cancellation_invoice_rows',int(cancel.sum())],
         ['nonpositive_quantity_rows',int(nonpositive_qty.sum())],['nonpositive_price_rows',int(nonpositive_price.sum())],
@@ -99,8 +107,9 @@ def transform(raw):
     return {'sales':sales,'cancellations':cancellations,'invoices':invoice,'rfm':rfm,'monthly_sales':by_month,'country_sales':by_country,'product_sales':by_product,'data_quality':quality}
 
 def outputs(tables,mode):
-    folder=ROOT/'data/processed';folder.mkdir(parents=True,exist_ok=True)
-    (ROOT/'database').mkdir(parents=True,exist_ok=True)
+    folder = ROOT / 'data/processed'
+    folder.mkdir(parents=True, exist_ok=True)
+    (ROOT / 'database').mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(ROOT/'database/retail_analysis.sqlite') as con:
         for k,df in tables.items():
             df.to_csv(folder/f'{k}.csv',index=False)
@@ -160,4 +169,5 @@ def main():
     except ImportError:
         print('Charts not generated (matplotlib is not installed).')
 
-if __name__=='__main__':main()
+if __name__ == '__main__':
+    main()
