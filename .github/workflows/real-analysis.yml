@@ -44,18 +44,8 @@ jobs:
           from pathlib import Path
           Path('powerbi/data/SOURCE.txt').write_text('UCI Online Retail (Chen, 2015), dataset 352; original 541909 rows; processed by scripts/run_pipeline.py --mode real. Gross positive merchandise sales are NOT net revenue.\n',encoding='utf8')
           PY
-      - name: Publish verified REAL summaries and dashboard inputs
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/ figures/ powerbi/data/
-          if git diff --cached --quiet; then
-            echo "No analytical outputs changed"
-          else
-            git commit -m "data: verified real UCI retail KPIs, charts and Power BI tables"
-            git push
-          fi
+      - name: Summarize outputs
+        run: echo "Analysis generated; attach tables and charts as workflow artifacts. Previously committed verified tables remain available in powerbi/data/."
       - name: Upload analysis evidence
         uses: actions/upload-artifact@v4
         with:
