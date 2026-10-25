@@ -1,15 +1,20 @@
-"""Execute SQL examples against SQLite database created by the pipeline."""
+"""Запускаем SQL-запросы и сохраняем результаты в CSV."""
 from pathlib import Path
 import sqlite3
 import pandas as pd
-ROOT=Path(__file__).resolve().parents[1]
-with sqlite3.connect(ROOT/'database/retail_analysis.sqlite') as con:
-    for path in sorted((ROOT/'sql').glob('*.sql')):
-        if path.name.startswith('00_'):
-            con.executescript(path.read_text(encoding='utf8'))
-            print(f'{path.name}: created index(es)')
-            continue
-        q=path.read_text(encoding='utf8')
-        df=pd.read_sql_query(q,con)
-        df.to_csv(ROOT/'reports'/f'{path.stem}.csv',index=False)
-        print(f'{path.name}: {len(df)} rows -> reports/{path.stem}.csv')
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORTS = ROOT / 'reports'
+REPORTS.mkdir(exist_ok=True)
+
+with sqlite3.connect(ROOT / 'database/retail_analysis.sqlite') as connection:
+    for sql_file in sorted((ROOT / 'sql').glob('*.sql')):
+        query = sql_file.read_text(encoding='utf-8')
+        if sql_file.name.startswith('00_'):
+            connection.executescript(query)
+            print(sql_file.name, '- indexes created')
+        else:
+            result = pd.read_sql_query(query, connection)
+            output = REPORTS / f'{sql_file.stem}.csv'
+            result.to_csv(output, index=False)
+            print(sql_file.name, '-', len(result), 'rows')
