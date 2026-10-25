@@ -1,6 +1,6 @@
 # Power BI — implementation guide
 
-**Status:** data model + DAX + build instructions are provided. A native `.pbix` report is **not** included; it must be created and saved using Power BI Desktop. Do not claim a published Power BI dashboard until it has been built and reviewed.
+**Status:** a three-page native Power BI Desktop report has been built and uploaded: [`Retail_Sales_Customer_Analytics.pbix`](Retail_Sales_Customer_Analytics.pbix). The real-data CSV exports, DAX reference and build instructions are also included. Opening on another device may require updating local CSV source paths.
 
 ## Load data
 1. Run `python scripts/run_pipeline.py --mode real` (after obtaining the UCI file) or `--mode demo` to test offline.
