@@ -6,7 +6,7 @@ An end-to-end **educational business analytics case** built around transactions 
 
 **Data status: VERIFIED REAL UCI DATA.** The GitHub Actions pipeline processed all 541,909 source rows. Python transformations, unit tests and SQL queries completed successfully. Exported real-data tables are in `powerbi/data/`, validated summary in `reports/analysis_summary.md`. The original raw workbook is intentionally not redistributed.
 
-**Portfolio stage:** verified real-data analysis and visual summaries are published. A locally built three-page Power BI Desktop report has been reviewed for structure; its binary `.pbix` file is not yet committed to this repository.
+**Portfolio stage:** verified real-data analysis and visual summaries are published. The three-page Power BI Desktop report is published in [`powerbi/Retail_Sales_Customer_Analytics.pbix`](powerbi/Retail_Sales_Customer_Analytics.pbix).
 
 ## Verified real-data results (UCI Online Retail)
 
@@ -109,7 +109,7 @@ The cleaning pipeline validates types, identifies cancellation invoices, exclude
 
 Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.md).
 
-> **Power BI status:** a locally saved three-page `.pbix` report exists, with Sales Overview, Customer Analytics and Data Quality. The GitHub repository does not contain the binary file yet. The PNG previews here are Python charts, not Power BI screenshots.
+> **Power BI status:** the [`Retail_Sales_Customer_Analytics.pbix`](powerbi/Retail_Sales_Customer_Analytics.pbix) dashboard is available with Sales Overview, Customer Analytics and Data Quality. The PNG previews here are Python charts, not Power BI screenshots.
 
 ## 5. Selected metrics and visuals
 
@@ -117,7 +117,7 @@ Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.
 
 [Full analysis summary](reports/analysis_summary.md) · [Monthly KPI results](reports/01_kpis.csv) · [Power BI-ready datasets](powerbi/data/) · [Dashboard build instructions](powerbi/REPORT_SETUP.md)
 
-**A native Power BI `.pbix` file is not yet included.** This repository provides real data exports, DAX measures, and exact build specifications for Power BI Desktop. Figures shown above are Python-generated, not Power BI screenshots.
+**A native Power BI report is included:** [`Retail_Sales_Customer_Analytics.pbix`](powerbi/Retail_Sales_Customer_Analytics.pbix). The project also includes real-data exports and DAX measures. Figures shown above are Python-generated, not Power BI screenshots.
 
 ## 6. Analytical boundaries
 
@@ -129,9 +129,9 @@ Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.
 
 For full definitions see [methodology](docs/methodology.md).
 
-## 7. Remaining Power BI milestone
+## 7. Power BI report and portability
 
-1. Upload the completed local `Retail_Sales_Customer_Analytics.pbix` to the `powerbi/` folder via GitHub's Add file → Upload files interface.
+1. The completed `.pbix` has been uploaded to the `powerbi/` folder.
 2. Open and refresh the report on another computer, updating local CSV source paths if necessary.
 3. Optionally add screenshots captured from Power BI Desktop.
 
