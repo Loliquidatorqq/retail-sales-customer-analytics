@@ -6,7 +6,7 @@ An end-to-end **educational business analytics case** built around transactions 
 
 **Data status: VERIFIED REAL UCI DATA.** The GitHub Actions pipeline processed all 541,909 source rows. Python transformations, unit tests and SQL queries completed successfully. Exported real-data tables are in `powerbi/data/`, validated summary in `reports/analysis_summary.md`. The original raw workbook is intentionally not redistributed.
 
-**Portfolio stage:** reproducible code and SQL are published; sample charts and generated data are in the downloadable project archive. A validated real-data study and native Power BI report are still pending.
+**Portfolio stage:** verified real-data analysis and visual summaries are published. A locally built three-page Power BI Desktop report has been reviewed for structure; its binary `.pbix` file is not yet committed to this repository.
 
 ## Verified real-data results (UCI Online Retail)
 
@@ -109,7 +109,7 @@ The cleaning pipeline validates types, identifies cancellation invoices, exclude
 
 Prepared CSVs, DAX measures and instructions are in [`powerbi/`](powerbi/README.md).
 
-> **Power BI status:** a native `.pbix` dashboard is **not yet included**. Power BI Desktop is needed to assemble, validate and save the interactive report. The visual PNG previews are Python charts, not Power BI screenshots.
+> **Power BI status:** a locally saved three-page `.pbix` report exists, with Sales Overview, Customer Analytics and Data Quality. The GitHub repository does not contain the binary file yet. The PNG previews here are Python charts, not Power BI screenshots.
 
 ## 5. Selected metrics and visuals
 
@@ -131,9 +131,9 @@ For full definitions see [methodology](docs/methodology.md).
 
 ## 7. Remaining Power BI milestone
 
-1. Open the prepared real-data tables in Power BI Desktop and validate KPI totals.
-2. Assemble the three report pages following `powerbi/REPORT_SETUP.md`.
-3. Save and commit an actual `.pbix` file and genuine Power BI screenshots; until then this is an analytics pipeline with Power BI-ready outputs.
+1. Upload the completed local `Retail_Sales_Customer_Analytics.pbix` to the `powerbi/` folder via GitHub's Add file → Upload files interface.
+2. Open and refresh the report on another computer, updating local CSV source paths if necessary.
+3. Optionally add screenshots captured from Power BI Desktop.
 
 ## Author
 
